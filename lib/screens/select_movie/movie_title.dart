@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_theater/models/movie.dart';
-import 'package:movie_theater/screens/select_movie/star_rating.dart';
 
 class MovieTitle extends StatelessWidget {
   const MovieTitle({

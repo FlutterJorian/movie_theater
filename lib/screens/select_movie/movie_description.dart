@@ -79,7 +79,7 @@ class _MovieDescriptionState extends State<MovieDescription> {
           style: textStyle,
           textAlign: TextAlign.justify,
         ),
-        SizedBox(height: 80),
+        SizedBox(height: 250),
       ],
     );
   }
