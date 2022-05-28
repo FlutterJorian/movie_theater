@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:movie_theater/main.dart';
 import 'package:movie_theater/models/movie.dart';
 import 'package:movie_theater/screens/select_movie/background_cards.dart';
 import 'package:movie_theater/screens/select_movie/movie_card.dart';
@@ -35,16 +36,21 @@ class _SelectMovieState extends State<SelectMovie>
   late Animation<double> imageAnimation;
   late Animation<double> titleAnimation;
   List<Animation<double>> starsAnimations = [];
-  late Animation<double> cardAnimation;
+  Animation<double>? cardAnimation;
   late Animation<double> dotsAnimation;
   late Animation<double> leftRightCardAnimation;
-
-  late AnimationController animationController2;
   late Animation<double> descTransformAnimation;
   late Animation<double> descFadeInAnimation;
+
+  late AnimationController animationController2;
   late Animation<double> bgCardLeftAnimation;
   late Animation<double> bgCardCenterAnimation;
   late Animation<double> bgCardRightAnimation;
+
+  late AnimationController animationControllerTransition;
+  Animation<double>? buttonWidthAnimation;
+  late Animation<double> buttonScaleAnimation;
+  Color buttonColor = Colors.grey.shade800;
 
   bool isPageViewEnabled = true;
 
@@ -56,7 +62,7 @@ class _SelectMovieState extends State<SelectMovie>
     // Animation Controller 1
     animationController1 = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 800),
     );
     imageAnimation = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
@@ -71,13 +77,22 @@ class _SelectMovieState extends State<SelectMovie>
       ),
     )..addListener(animationListener);
     var starTween = Tween<double>(begin: 374, end: 79);
-    var starCurve = Interval(0.2, 1.0, curve: Cubic(.81, .87, .59, 1.18));
+    var starCurve = Interval(
+      0.2,
+      1.0,
+      curve: Cubic(.81, .87, .59, 1.18),
+    );
     for (int i = 0; i < 5; i++) {
-      var starAnimation = starTween.animate(CurvedAnimation(
-        parent: animationController1,
-        curve: Interval(i / 10 * 2, 1.0, curve: starCurve),
-      ))
-        ..addListener(animationListener);
+      var starAnimation = starTween.animate(
+        CurvedAnimation(
+          parent: animationController1,
+          curve: Interval(
+            i / 10 * 2,
+            1.0,
+            curve: starCurve,
+          ),
+        ),
+      )..addListener(animationListener);
       starsAnimations.add(starAnimation);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -99,20 +114,23 @@ class _SelectMovieState extends State<SelectMovie>
         curve: Interval(0.2, 0.8),
       ),
     )..addListener(animationListener);
+    var interval = CurvedAnimation(
+      parent: animationController1,
+      curve: Interval(0.5, 1),
+    );
+    descTransformAnimation = Tween<double>(begin: 400, end: 0).animate(interval)
+      ..addListener(animationListener);
+    descFadeInAnimation = Tween<double>(begin: 0, end: 1).animate(interval)
+      ..addListener(animationListener);
 
     // Animation Controller 2
     animationController2 = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 600),
+      duration: Duration(milliseconds: 400),
     );
-    var interval = CurvedAnimation(
-        parent: animationController2, curve: Interval(0.3, 0.7));
-    descTransformAnimation = Tween<double>(begin: 295, end: 0).animate(interval)
-      ..addListener(animationListener);
-    descFadeInAnimation = Tween<double>(begin: 0, end: 1).animate(interval)
-      ..addListener(animationListener);
     var bgCardCurve = Curves.easeOutBack;
-    bgCardLeftAnimation = Tween<double>(begin: 100, end: 0).animate(
+    var bgCardTween = Tween<double>(begin: 160, end: 0);
+    bgCardLeftAnimation = bgCardTween.animate(
       CurvedAnimation(
         parent: animationController2,
         curve: Interval(
@@ -122,7 +140,7 @@ class _SelectMovieState extends State<SelectMovie>
         ),
       ),
     )..addListener(animationListener);
-    bgCardCenterAnimation = Tween<double>(begin: 100, end: 0).animate(
+    bgCardCenterAnimation = bgCardTween.animate(
       CurvedAnimation(
         parent: animationController2,
         curve: Interval(
@@ -132,7 +150,7 @@ class _SelectMovieState extends State<SelectMovie>
         ),
       ),
     )..addListener(animationListener);
-    bgCardRightAnimation = Tween<double>(begin: 100, end: 0).animate(
+    bgCardRightAnimation = bgCardTween.animate(
       CurvedAnimation(
         parent: animationController2,
         curve: Interval(
@@ -142,6 +160,31 @@ class _SelectMovieState extends State<SelectMovie>
         ),
       ),
     )..addListener(animationListener);
+
+    // Transition animations
+    animationControllerTransition = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      buttonWidthAnimation =
+          Tween<double>(begin: MediaQuery.of(context).size.width, end: 50)
+              .animate(
+        CurvedAnimation(
+          parent: animationControllerTransition,
+          curve: Interval(0, 0.5),
+        ),
+      )..addListener(animationListener);
+    });
+    buttonScaleAnimation = Tween<double>(begin: 1, end: 30).animate(
+      CurvedAnimation(
+        parent: animationControllerTransition,
+        curve: Interval(0.6, 1.0),
+      ),
+    )..addListener(() {
+        buttonColor = Colors.black;
+        animationListener();
+      });
     super.initState();
   }
 
@@ -169,11 +212,14 @@ class _SelectMovieState extends State<SelectMovie>
     pageController.dispose();
     animationController1.dispose();
     animationController2.dispose();
+    animationControllerTransition.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var cardAnimationValue = cardAnimation?.value ?? 200;
+    var pageIndex = currentPage.round();
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -204,11 +250,13 @@ class _SelectMovieState extends State<SelectMovie>
               },
             ),
           ],
-          if (!isPageViewEnabled && animationController1.isCompleted) ...[
+          if (!isPageViewEnabled &&
+              (animationController2.isAnimating ||
+                  animationController2.isCompleted)) ...[
             BackgroundCards(
               scrollController: scrollController,
               currentScrollOffset: currentScrollOffset,
-              currentPage: currentPage,
+              index: pageIndex,
               movies: widget.movies,
               bgCardCenterAnimationVal: bgCardCenterAnimation.value,
               bgCardLeftAnimationVal: bgCardLeftAnimation.value,
@@ -249,7 +297,7 @@ class _SelectMovieState extends State<SelectMovie>
                 ),
                 if (!isPageViewEnabled) ...[
                   Container(
-                    width: cardAnimation.value,
+                    width: cardAnimationValue,
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -264,7 +312,7 @@ class _SelectMovieState extends State<SelectMovie>
                     child: Transform.scale(
                       scale: imageAnimation.value,
                       child: MoviePoster(
-                        image: widget.movies[currentPage.toInt()].image,
+                        image: widget.movies[pageIndex].image,
                       ),
                     ),
                   ),
@@ -278,7 +326,7 @@ class _SelectMovieState extends State<SelectMovie>
                           Transform.translate(
                             offset: Offset(0, titleAnimation.value),
                             child: MovieTitle(
-                              movie: widget.movies[currentPage.toInt()],
+                              movie: widget.movies[pageIndex],
                             ),
                           ),
                           Padding(
@@ -287,7 +335,7 @@ class _SelectMovieState extends State<SelectMovie>
                               starAnimationValues: starsAnimations
                                   .map((star) => star.value)
                                   .toList(),
-                              rating: widget.movies[currentPage.toInt()].rating,
+                              rating: widget.movies[pageIndex].rating,
                             ),
                           ),
                           Transform.translate(
@@ -323,9 +371,13 @@ class _SelectMovieState extends State<SelectMovie>
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {
+                if (animationController1.isAnimating ||
+                    animationController2.isAnimating ||
+                    animationControllerTransition.isAnimating) return;
                 if (isPageViewEnabled) {
+                  pageController.jumpToPage(pageIndex);
                   setState(() {
                     isPageViewEnabled = false;
                   });
@@ -335,31 +387,51 @@ class _SelectMovieState extends State<SelectMovie>
                     () => animationController2.forward(),
                   );
                 } else {
-                  animationController1.reset();
-                  animationController2.reset();
-                  setState(() {
-                    isPageViewEnabled = true;
-                  });
+                  animationControllerTransition.forward().whenComplete(
+                        () => Navigator.pushReplacementNamed(
+                          context,
+                          MovieTheaterRoute.buyTicket,
+                        ),
+                      );
+                  // animationController1.reset();
+                  // animationController2.reset();
+                  // setState(() {
+                  //   isPageViewEnabled = true;
+                  // });
                 }
               },
-              child: Container(
-                width: 450,
-                height: 45,
-                margin: EdgeInsets.only(left: 80, right: 80, bottom: 30),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade800,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Center(
-                  child: Text(
-                    'BUY TICKET',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
+              child: Transform.scale(
+                scale: buttonScaleAnimation.value,
+                child: Container(
+                  width: !animationControllerTransition.isAnimating &&
+                          !animationControllerTransition.isCompleted
+                      ? cardAnimationValue + 20
+                      : buttonWidthAnimation?.value ?? 220,
+                  height: 50,
+                  margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
+                  decoration: BoxDecoration(
+                    color: buttonColor,
+                    borderRadius: BorderRadius.circular(
+                      !animationControllerTransition.isAnimating &&
+                              !animationControllerTransition.isCompleted
+                          ? 5
+                          : 25,
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                  child: !animationControllerTransition.isAnimating &&
+                          !animationControllerTransition.isCompleted
+                      ? Center(
+                          child: Text(
+                            'BUY TICKET',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : SizedBox.shrink(),
                 ),
               ),
             ),

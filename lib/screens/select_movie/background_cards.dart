@@ -6,7 +6,7 @@ class BackgroundCards extends StatelessWidget {
   const BackgroundCards({
     required this.scrollController,
     required this.currentScrollOffset,
-    required this.currentPage,
+    required this.index,
     required this.movies,
     required this.bgCardCenterAnimationVal,
     required this.bgCardLeftAnimationVal,
@@ -16,7 +16,7 @@ class BackgroundCards extends StatelessWidget {
 
   final ScrollController scrollController;
   final double currentScrollOffset;
-  final double currentPage;
+  final int index;
   final List<Movie> movies;
   final double bgCardLeftAnimationVal;
   final double bgCardCenterAnimationVal;
@@ -34,7 +34,6 @@ class BackgroundCards extends StatelessWidget {
           width += offset;
           marginTop += offset;
         }
-        var index = currentPage.toInt();
         return Stack(
           children: [
             Transform.translate(
