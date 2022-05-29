@@ -8,9 +8,9 @@ class BackgroundCards extends StatelessWidget {
     required this.currentScrollOffset,
     required this.index,
     required this.movies,
-    required this.bgCardCenterAnimationVal,
-    required this.bgCardLeftAnimationVal,
-    required this.bgCardRightAnimationVal,
+    required this.bgCardCenterAnimation,
+    required this.bgCardLeftAnimation,
+    required this.bgCardRightAnimation,
     Key? key,
   }) : super(key: key);
 
@@ -18,9 +18,9 @@ class BackgroundCards extends StatelessWidget {
   final double currentScrollOffset;
   final int index;
   final List<Movie> movies;
-  final double bgCardLeftAnimationVal;
-  final double bgCardCenterAnimationVal;
-  final double bgCardRightAnimationVal;
+  final Animation<double> bgCardLeftAnimation;
+  final Animation<double> bgCardCenterAnimation;
+  final Animation<double> bgCardRightAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -36,42 +36,57 @@ class BackgroundCards extends StatelessWidget {
         }
         return Stack(
           children: [
-            Transform.translate(
-              offset: Offset(0, bgCardLeftAnimationVal),
-              child: Container(
-                margin: EdgeInsets.only(top: marginTop),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: MoviePoster(
-                    image: movies[(index - 1) % movies.length].image,
+            AnimatedBuilder(
+              animation: bgCardLeftAnimation,
+              builder: (context, _) {
+                return Transform.translate(
+                  offset: Offset(0, bgCardLeftAnimation.value),
+                  child: Container(
+                    margin: EdgeInsets.only(top: marginTop),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: MoviePoster(
+                        image: movies[(index - 1) % movies.length].image,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-            Transform.translate(
-              offset: Offset(0, bgCardRightAnimationVal),
-              child: Container(
-                margin: EdgeInsets.only(top: marginTop),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: MoviePoster(
-                    image: movies[(index + 1) % movies.length].image,
+            AnimatedBuilder(
+              animation: bgCardRightAnimation,
+              builder: (context, _) {
+                return Transform.translate(
+                  offset: Offset(0, bgCardRightAnimation.value),
+                  child: Container(
+                    margin: EdgeInsets.only(top: marginTop),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: MoviePoster(
+                        image: movies[(index + 1) % movies.length].image,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-            Transform.translate(
-              offset: Offset(0, bgCardCenterAnimationVal),
-              child: Container(
-                margin: EdgeInsets.only(top: 60),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: MoviePoster(
-                    width: width,
-                    image: movies[index].image,
+            AnimatedBuilder(
+              animation: bgCardCenterAnimation,
+              builder: (context, _) {
+                return Transform.translate(
+                  offset: Offset(0, bgCardCenterAnimation.value),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 60),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: MoviePoster(
+                        width: width,
+                        image: movies[index].image,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         );

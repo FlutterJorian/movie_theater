@@ -36,7 +36,8 @@ class _SelectMovieState extends State<SelectMovie>
   late Animation<double> imageAnimation;
   late Animation<double> titleAnimation;
   List<Animation<double>> starsAnimations = [];
-  Animation<double>? cardAnimation;
+  Animation<double>? _cardAnimation;
+  var cardSize = 200.0;
   late Animation<double> dotsAnimation;
   late Animation<double> leftRightCardAnimation;
   late Animation<double> descTransformAnimation;
@@ -48,7 +49,8 @@ class _SelectMovieState extends State<SelectMovie>
   late Animation<double> bgCardRightAnimation;
 
   late AnimationController animationControllerTransition;
-  Animation<double>? buttonWidthAnimation;
+  Animation<double>? _buttonWidthAnimation;
+  var buttonWidth = 220.0;
   late Animation<double> buttonScaleAnimation;
   Color buttonColor = Colors.grey.shade800;
 
@@ -69,13 +71,13 @@ class _SelectMovieState extends State<SelectMovie>
         parent: animationController1,
         curve: Interval(0.0, 0.4),
       ),
-    )..addListener(animationListener);
+    );
     titleAnimation = Tween<double>(begin: 295, end: 0).animate(
       CurvedAnimation(
         parent: animationController1,
         curve: Interval(0.2, 0.8, curve: Curves.linear),
       ),
-    )..addListener(animationListener);
+    );
     var starTween = Tween<double>(begin: 374, end: 79);
     var starCurve = Interval(
       0.2,
@@ -92,36 +94,36 @@ class _SelectMovieState extends State<SelectMovie>
             curve: starCurve,
           ),
         ),
-      )..addListener(animationListener);
+      );
       starsAnimations.add(starAnimation);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      cardAnimation =
+      _cardAnimation =
           Tween<double>(begin: 200, end: MediaQuery.of(context).size.width)
               .animate(
         CurvedAnimation(
           parent: animationController1,
           curve: Interval(0.2, 0.8),
         ),
-      )..addListener(animationListener);
+      )..addListener(() => setState(() {
+                cardSize = _cardAnimation!.value;
+              }));
     });
-    dotsAnimation = Tween<double>(begin: 1, end: 0)
-        .animate(animationController1)
-      ..addListener(animationListener);
+    dotsAnimation =
+        Tween<double>(begin: 1, end: 0).animate(animationController1);
     leftRightCardAnimation = Tween<double>(begin: 0, end: 275).animate(
       CurvedAnimation(
         parent: animationController1,
         curve: Interval(0.2, 0.8),
       ),
-    )..addListener(animationListener);
+    );
     var interval = CurvedAnimation(
       parent: animationController1,
       curve: Interval(0.5, 1),
     );
-    descTransformAnimation = Tween<double>(begin: 400, end: 0).animate(interval)
-      ..addListener(animationListener);
-    descFadeInAnimation = Tween<double>(begin: 0, end: 1).animate(interval)
-      ..addListener(animationListener);
+    descTransformAnimation =
+        Tween<double>(begin: 400, end: 0).animate(interval);
+    descFadeInAnimation = Tween<double>(begin: 0, end: 1).animate(interval);
 
     // Animation Controller 2
     animationController2 = AnimationController(
@@ -139,7 +141,7 @@ class _SelectMovieState extends State<SelectMovie>
           curve: bgCardCurve,
         ),
       ),
-    )..addListener(animationListener);
+    );
     bgCardCenterAnimation = bgCardTween.animate(
       CurvedAnimation(
         parent: animationController2,
@@ -149,7 +151,7 @@ class _SelectMovieState extends State<SelectMovie>
           curve: bgCardCurve,
         ),
       ),
-    )..addListener(animationListener);
+    );
     bgCardRightAnimation = bgCardTween.animate(
       CurvedAnimation(
         parent: animationController2,
@@ -159,7 +161,7 @@ class _SelectMovieState extends State<SelectMovie>
           curve: bgCardCurve,
         ),
       ),
-    )..addListener(animationListener);
+    );
 
     // Transition animations
     animationControllerTransition = AnimationController(
@@ -167,14 +169,16 @@ class _SelectMovieState extends State<SelectMovie>
       duration: Duration(milliseconds: 1000),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      buttonWidthAnimation =
+      _buttonWidthAnimation =
           Tween<double>(begin: MediaQuery.of(context).size.width, end: 50)
               .animate(
         CurvedAnimation(
           parent: animationControllerTransition,
           curve: Interval(0, 0.5),
         ),
-      )..addListener(animationListener);
+      )..addListener(() => setState(() {
+                buttonWidth = _buttonWidthAnimation!.value;
+              }));
     });
     buttonScaleAnimation = Tween<double>(begin: 1, end: 30).animate(
       CurvedAnimation(
@@ -183,13 +187,8 @@ class _SelectMovieState extends State<SelectMovie>
       ),
     )..addListener(() {
         buttonColor = Colors.black;
-        animationListener();
       });
     super.initState();
-  }
-
-  void animationListener() {
-    setState(() {});
   }
 
   void setCurrentPage() {
@@ -218,7 +217,6 @@ class _SelectMovieState extends State<SelectMovie>
 
   @override
   Widget build(BuildContext context) {
-    var cardAnimationValue = cardAnimation?.value ?? 200;
     var pageIndex = currentPage.round();
     return Scaffold(
       backgroundColor: Colors.black,
@@ -258,9 +256,9 @@ class _SelectMovieState extends State<SelectMovie>
               currentScrollOffset: currentScrollOffset,
               index: pageIndex,
               movies: widget.movies,
-              bgCardCenterAnimationVal: bgCardCenterAnimation.value,
-              bgCardLeftAnimationVal: bgCardLeftAnimation.value,
-              bgCardRightAnimationVal: bgCardRightAnimation.value,
+              bgCardCenterAnimation: bgCardCenterAnimation,
+              bgCardLeftAnimation: bgCardLeftAnimation,
+              bgCardRightAnimation: bgCardRightAnimation,
             )
           ],
           Container(
@@ -287,17 +285,21 @@ class _SelectMovieState extends State<SelectMovie>
                       isPageViewEnabled ? null : NeverScrollableScrollPhysics(),
                   itemCount: widget.movies.length,
                   controller: pageController,
-                  itemBuilder: (context, index) => MovieCard(
-                    index: index,
-                    movie: widget.movies[index],
-                    currentPage: currentPage,
-                    pageController: pageController,
-                    animationValue: leftRightCardAnimation.value,
-                  ),
+                  itemBuilder: (context, index) => AnimatedBuilder(
+                      animation: leftRightCardAnimation,
+                      builder: (context, _) {
+                        return MovieCard(
+                          index: index,
+                          movie: widget.movies[index],
+                          currentPage: currentPage,
+                          pageController: pageController,
+                          animationValue: leftRightCardAnimation.value,
+                        );
+                      }),
                 ),
                 if (!isPageViewEnabled) ...[
                   Container(
-                    width: cardAnimationValue,
+                    width: cardSize,
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -309,8 +311,8 @@ class _SelectMovieState extends State<SelectMovie>
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: Transform.scale(
-                      scale: imageAnimation.value,
+                    child: ScaleTransition(
+                      scale: imageAnimation,
                       child: MoviePoster(
                         image: widget.movies[pageIndex].image,
                       ),
@@ -323,42 +325,52 @@ class _SelectMovieState extends State<SelectMovie>
                       physics: BouncingScrollPhysics(),
                       child: Stack(
                         children: [
-                          Transform.translate(
-                            offset: Offset(0, titleAnimation.value),
-                            child: MovieTitle(
-                              movie: widget.movies[pageIndex],
+                          AnimatedBuilder(
+                            animation: titleAnimation,
+                            builder: (context, _) => Transform.translate(
+                              offset: Offset(0, titleAnimation.value),
+                              child: MovieTitle(
+                                movie: widget.movies[pageIndex],
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: StarRatingAnimated(
-                              starAnimationValues: starsAnimations
-                                  .map((star) => star.value)
-                                  .toList(),
+                              starAnimations: starsAnimations,
                               rating: widget.movies[pageIndex].rating,
                             ),
                           ),
-                          Transform.translate(
-                            offset: Offset(0, 402),
-                            child: Center(
-                              child: Text(
-                                '...',
-                                style: TextStyle(
-                                  height: 0.9,
-                                  color: Colors.grey.shade800
-                                      .withOpacity(dotsAnimation.value),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
+                          AnimatedBuilder(
+                            animation: dotsAnimation,
+                            builder: (context, _) => Transform.translate(
+                              offset: Offset(0, 402),
+                              child: Center(
+                                child: Text(
+                                  '...',
+                                  style: TextStyle(
+                                    height: 0.9,
+                                    color: Colors.grey.shade800
+                                        .withOpacity(dotsAnimation.value),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          Opacity(
-                            opacity: descFadeInAnimation.value,
-                            child: Transform.translate(
-                              offset:
-                                  Offset(0, 115 + descTransformAnimation.value),
-                              child: MovieDescription(),
+                          AnimatedBuilder(
+                            animation: descFadeInAnimation,
+                            builder: (context, _) => Opacity(
+                              opacity: descFadeInAnimation.value,
+                              child: AnimatedBuilder(
+                                animation: descTransformAnimation,
+                                builder: (context, _) => Transform.translate(
+                                  offset: Offset(
+                                      0, 115 + descTransformAnimation.value),
+                                  child: MovieDescription(),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -400,13 +412,13 @@ class _SelectMovieState extends State<SelectMovie>
                   // });
                 }
               },
-              child: Transform.scale(
-                scale: buttonScaleAnimation.value,
+              child: ScaleTransition(
+                scale: buttonScaleAnimation,
                 child: Container(
                   width: !animationControllerTransition.isAnimating &&
                           !animationControllerTransition.isCompleted
-                      ? cardAnimationValue + 20
-                      : buttonWidthAnimation?.value ?? 220,
+                      ? cardSize + 20
+                      : buttonWidth,
                   height: 50,
                   margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
                   decoration: BoxDecoration(

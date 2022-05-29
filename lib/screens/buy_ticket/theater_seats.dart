@@ -3,11 +3,13 @@ import 'package:movie_theater/screens/buy_ticket/theater_seat.dart';
 
 class TheaterSeats extends StatelessWidget {
   const TheaterSeats({
-    required this.rowScales,
+    required this.seatRowAnimations,
+    this.onSelected,
     Key? key,
   }) : super(key: key);
 
-  final List<double> rowScales;
+  final List<Animation<double>> seatRowAnimations;
+  final void Function(bool selected)? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,16 @@ class TheaterSeats extends StatelessWidget {
         Column(
           children: [
             SizedBox(height: totalseatSize),
-            TheaterSeat(scale: rowScales[1]),
-            TheaterSeat(scale: rowScales[2]),
-            TheaterSeat(scale: rowScales[3]),
-            TheaterSeat(scale: rowScales[4]),
-            TheaterSeat(scale: rowScales[5]),
+            TheaterSeat(
+                scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
+            TheaterSeat(
+                scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+            TheaterSeat(
+                scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+            TheaterSeat(
+                scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+            TheaterSeat(
+                scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
           ],
         ),
         Container(
@@ -32,15 +39,28 @@ class TheaterSeats extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: totalseatSize),
-              TheaterSeat(scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[7], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -48,16 +68,34 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 6, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[7], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -65,16 +103,34 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[7], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -82,16 +138,36 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(isTaken: false, scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[7],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -99,16 +175,36 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(isTaken: false, scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[7],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -116,16 +212,36 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(isTaken: false, scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[7],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -133,16 +249,36 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 6, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(isTaken: false, scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[7],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -150,16 +286,36 @@ class TheaterSeats extends StatelessWidget {
           margin: EdgeInsets.only(top: 4, left: seatMargin),
           child: Column(
             children: [
-              TheaterSeat(isTaken: false, scale: rowScales[0]),
-              TheaterSeat(isTaken: false, scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(isTaken: false, scale: rowScales[7]),
-              TheaterSeat(isTaken: false, scale: rowScales[8]),
-              TheaterSeat(isTaken: false, scale: rowScales[9]),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[0],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[1],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[7],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[8],
+                  onSelected: onSelected),
+              TheaterSeat(
+                  isTaken: false,
+                  scaleAnimation: seatRowAnimations[9],
+                  onSelected: onSelected),
             ],
           ),
         ),
@@ -168,15 +324,24 @@ class TheaterSeats extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: totalseatSize),
-              TheaterSeat(scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(scale: rowScales[7]),
-              TheaterSeat(scale: rowScales[8]),
-              TheaterSeat(scale: rowScales[9]),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[7], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[8], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[9], onSelected: onSelected),
             ],
           ),
         ),
@@ -185,15 +350,24 @@ class TheaterSeats extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: totalseatSize),
-              TheaterSeat(scale: rowScales[1]),
-              TheaterSeat(scale: rowScales[2]),
-              TheaterSeat(scale: rowScales[3]),
-              TheaterSeat(scale: rowScales[4]),
-              TheaterSeat(scale: rowScales[5]),
-              TheaterSeat(scale: rowScales[6]),
-              TheaterSeat(scale: rowScales[7]),
-              TheaterSeat(scale: rowScales[8]),
-              TheaterSeat(scale: rowScales[9]),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[2], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[3], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[4], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[5], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[6], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[7], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[8], onSelected: onSelected),
+              TheaterSeat(
+                  scaleAnimation: seatRowAnimations[9], onSelected: onSelected),
             ],
           ),
         ),
