@@ -23,6 +23,7 @@ class MovieTitle extends StatelessWidget {
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
         Row(
@@ -30,8 +31,8 @@ class MovieTitle extends StatelessWidget {
           children: movie.genres
               .map(
                 (genre) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 3),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  margin: EdgeInsets.symmetric(horizontal: 2.5),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(

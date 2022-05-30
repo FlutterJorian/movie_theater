@@ -24,10 +24,10 @@ class SelectMovie extends StatefulWidget {
 class _SelectMovieState extends State<SelectMovie>
     with TickerProviderStateMixin {
   final PageController pageController = PageController(
-    initialPage: 1,
+    initialPage: 9999999,
     viewportFraction: 0.70,
   );
-  double currentPage = 1.0;
+  double currentPage = 9999999;
 
   final ScrollController scrollController = ScrollController();
   double currentScrollOffset = 0.0;
@@ -218,238 +218,279 @@ class _SelectMovieState extends State<SelectMovie>
   @override
   Widget build(BuildContext context) {
     var pageIndex = currentPage.round();
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          if (isPageViewEnabled) ...[
-            AnimatedBuilder(
-              animation: pageController,
-              builder: (context, _) {
-                return Viewport(
-                  axisDirection: AxisDirection.left,
-                  slivers: [
-                    SliverFillViewport(
-                      delegate: SliverChildBuilderDelegate(
-                        childCount: widget.movies.length,
-                        (context, index) {
-                          return MoviePoster(
-                            image: widget.movies[index].image,
-                            isFullscreen: true,
-                          );
-                        },
+    var indexMovie = pageIndex % widget.movies.length;
+    var movie = widget.movies[indexMovie];
+    return WillPopScope(
+      onWillPop: () async {
+        back();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            if (isPageViewEnabled) ...[
+              AnimatedBuilder(
+                animation: pageController,
+                builder: (context, _) {
+                  return Viewport(
+                    axisDirection: AxisDirection.left,
+                    slivers: [
+                      SliverFillViewport(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            var movieIndex = index % widget.movies.length;
+                            return MoviePoster(
+                              image: widget.movies[movieIndex].image,
+                              isFullscreen: true,
+                            );
+                          },
+                        ),
                       ),
+                    ],
+                    offset: ViewportOffset.fixed(
+                      MediaQuery.of(context).size.width * currentPage,
                     ),
+                  );
+                },
+              ),
+            ],
+            if (!isPageViewEnabled &&
+                (animationController2.isAnimating ||
+                    animationController2.isCompleted)) ...[
+              BackgroundCards(
+                scrollController: scrollController,
+                currentScrollOffset: currentScrollOffset,
+                index: indexMovie,
+                movies: widget.movies,
+                bgCardCenterAnimation: bgCardCenterAnimation,
+                bgCardLeftAnimation: bgCardLeftAnimation,
+                bgCardRightAnimation: bgCardRightAnimation,
+              )
+            ],
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: const [
+                    Colors.transparent,
+                    Colors.white,
                   ],
-                  offset: ViewportOffset.fixed(
-                    MediaQuery.of(context).size.width * currentPage,
-                  ),
-                );
-              },
-            ),
-          ],
-          if (!isPageViewEnabled &&
-              (animationController2.isAnimating ||
-                  animationController2.isCompleted)) ...[
-            BackgroundCards(
-              scrollController: scrollController,
-              currentScrollOffset: currentScrollOffset,
-              index: pageIndex,
-              movies: widget.movies,
-              bgCardCenterAnimation: bgCardCenterAnimation,
-              bgCardLeftAnimation: bgCardLeftAnimation,
-              bgCardRightAnimation: bgCardRightAnimation,
-            )
-          ],
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: const [
-                  Colors.transparent,
-                  Colors.white,
-                ],
-                stops: const [0.30, 0.75],
+                  stops: const [0.30, 0.75],
+                ),
               ),
             ),
-          ),
-          Container(
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                PageView.builder(
-                  physics:
-                      isPageViewEnabled ? null : NeverScrollableScrollPhysics(),
-                  itemCount: widget.movies.length,
-                  controller: pageController,
-                  itemBuilder: (context, index) => AnimatedBuilder(
-                      animation: leftRightCardAnimation,
-                      builder: (context, _) {
-                        return MovieCard(
-                          index: index,
-                          movie: widget.movies[index],
-                          currentPage: currentPage,
-                          pageController: pageController,
-                          animationValue: leftRightCardAnimation.value,
-                        );
-                      }),
-                ),
-                if (!isPageViewEnabled) ...[
-                  Container(
-                    width: cardSize,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                      color: Colors.white,
-                    ),
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 3.5),
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  PageView.builder(
+                    physics: isPageViewEnabled
+                        ? null
+                        : NeverScrollableScrollPhysics(),
+                    controller: pageController,
+                    itemBuilder: (context, index) => AnimatedBuilder(
+                        animation: leftRightCardAnimation,
+                        builder: (context, _) {
+                          var movieIndex = index % widget.movies.length;
+                          return MovieCard(
+                            index: index,
+                            movie: widget.movies[movieIndex],
+                            currentPage: currentPage,
+                            pageController: pageController,
+                            animationValue: leftRightCardAnimation.value,
+                          );
+                        }),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: ScaleTransition(
-                      scale: imageAnimation,
-                      child: MoviePoster(
-                        image: widget.movies[pageIndex].image,
+                  if (!isPageViewEnabled) ...[
+                    Container(
+                      width: cardSize,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 30, right: 30, top: 20),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      physics: BouncingScrollPhysics(),
-                      child: Stack(
-                        children: [
-                          AnimatedBuilder(
-                            animation: titleAnimation,
-                            builder: (context, _) => Transform.translate(
-                              offset: Offset(0, titleAnimation.value),
-                              child: MovieTitle(
-                                movie: widget.movies[pageIndex],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: ScaleTransition(
+                        scale: imageAnimation,
+                        child: MoviePoster(
+                          image: movie.image,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        physics: BouncingScrollPhysics(),
+                        child: Stack(
+                          children: [
+                            AnimatedBuilder(
+                              animation: titleAnimation,
+                              builder: (context, _) => Transform.translate(
+                                offset: Offset(0, titleAnimation.value),
+                                child: MovieTitle(
+                                  movie: movie,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: StarRatingAnimated(
-                              starAnimations: starsAnimations,
-                              rating: widget.movies[pageIndex].rating,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: StarRatingAnimated(
+                                starAnimations: starsAnimations,
+                                rating: movie.rating,
+                              ),
                             ),
-                          ),
-                          AnimatedBuilder(
-                            animation: dotsAnimation,
-                            builder: (context, _) => Transform.translate(
-                              offset: Offset(0, 402),
-                              child: Center(
-                                child: Text(
-                                  '...',
-                                  style: TextStyle(
-                                    height: 0.9,
-                                    color: Colors.grey.shade800
-                                        .withOpacity(dotsAnimation.value),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25,
+                            AnimatedBuilder(
+                              animation: dotsAnimation,
+                              builder: (context, _) => Transform.translate(
+                                offset: Offset(0, 402),
+                                child: Center(
+                                  child: Text(
+                                    '...',
+                                    style: TextStyle(
+                                      height: 0.9,
+                                      color: Colors.grey.shade800
+                                          .withOpacity(dotsAnimation.value),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          AnimatedBuilder(
-                            animation: descFadeInAnimation,
-                            builder: (context, _) => Opacity(
-                              opacity: descFadeInAnimation.value,
-                              child: AnimatedBuilder(
-                                animation: descTransformAnimation,
-                                builder: (context, _) => Transform.translate(
-                                  offset: Offset(
-                                      0, 115 + descTransformAnimation.value),
-                                  child: MovieDescription(),
+                            AnimatedBuilder(
+                              animation: descFadeInAnimation,
+                              builder: (context, _) => Opacity(
+                                opacity: descFadeInAnimation.value,
+                                child: AnimatedBuilder(
+                                  animation: descTransformAnimation,
+                                  builder: (context, _) => Transform.translate(
+                                    offset: Offset(
+                                        0, 115 + descTransformAnimation.value),
+                                    child: MovieDescription(
+                                      movie: movie,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: GestureDetector(
-              onTap: () {
-                if (animationController1.isAnimating ||
-                    animationController2.isAnimating ||
-                    animationControllerTransition.isAnimating) return;
-                if (isPageViewEnabled) {
-                  pageController.jumpToPage(pageIndex);
-                  setState(() {
-                    isPageViewEnabled = false;
-                  });
-                  animationController1.forward();
-                  Future.delayed(
-                    Duration(milliseconds: 300),
-                    () => animationController2.forward(),
-                  );
-                } else {
-                  animationControllerTransition.forward().whenComplete(
-                        () => Navigator.pushReplacementNamed(
-                          context,
-                          MovieTheaterRoute.buyTicket,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onTap: () {
+                  if (animationController1.isAnimating ||
+                      animationController2.isAnimating ||
+                      animationControllerTransition.isAnimating) return;
+                  if (isPageViewEnabled) {
+                    pageController.jumpToPage(pageIndex);
+                    setState(() {
+                      isPageViewEnabled = false;
+                    });
+                    animationController1.forward();
+                    Future.delayed(
+                      Duration(milliseconds: 300),
+                      () => animationController2.forward(),
+                    );
+                  } else {
+                    animationControllerTransition.forward().whenComplete(() {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => MovieTheaterRoute
+                                  .routes()[MovieTheaterRoute.buyTicket]!
+                              .call(_),
                         ),
+                      ).whenComplete(
+                        () {
+                          animationControllerTransition.reverse().whenComplete(
+                                () => buttonColor = Colors.grey.shade800,
+                              );
+                        },
                       );
-                  // animationController1.reset();
-                  // animationController2.reset();
-                  // setState(() {
-                  //   isPageViewEnabled = true;
-                  // });
-                }
-              },
-              child: ScaleTransition(
-                scale: buttonScaleAnimation,
-                child: Container(
-                  width: !animationControllerTransition.isAnimating &&
-                          !animationControllerTransition.isCompleted
-                      ? cardSize + 20
-                      : buttonWidth,
-                  height: 50,
-                  margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
-                  decoration: BoxDecoration(
-                    color: buttonColor,
-                    borderRadius: BorderRadius.circular(
-                      !animationControllerTransition.isAnimating &&
-                              !animationControllerTransition.isCompleted
-                          ? 5
-                          : 25,
+                    });
+                  }
+                },
+                child: ScaleTransition(
+                  scale: buttonScaleAnimation,
+                  child: Container(
+                    width: !animationControllerTransition.isAnimating &&
+                            !animationControllerTransition.isCompleted
+                        ? cardSize + 20
+                        : buttonWidth,
+                    height: 50,
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
+                    decoration: BoxDecoration(
+                      color: buttonColor,
+                      borderRadius: BorderRadius.circular(
+                        !animationControllerTransition.isAnimating &&
+                                !animationControllerTransition.isCompleted
+                            ? 5
+                            : 25,
+                      ),
                     ),
-                  ),
-                  child: !animationControllerTransition.isAnimating &&
-                          !animationControllerTransition.isCompleted
-                      ? Center(
-                          child: Text(
-                            'BUY TICKET',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                    child: !animationControllerTransition.isAnimating &&
+                            !animationControllerTransition.isCompleted
+                        ? Center(
+                            child: Text(
+                              'BUY TICKET',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      : SizedBox.shrink(),
+                          )
+                        : SizedBox.shrink(),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.only(top: 50, left: 20),
+              child: GestureDetector(
+                onTap: back,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  void back() {
+    if (!isPageViewEnabled) {
+      animationController2.reverse();
+      Future.delayed(
+        Duration(milliseconds: 300),
+        () => animationController1.reverse().whenComplete(
+              () => isPageViewEnabled = true,
+            ),
+      );
+    }
   }
 }

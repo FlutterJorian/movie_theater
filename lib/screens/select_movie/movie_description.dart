@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:movie_theater/models/movie.dart';
+import 'package:movie_theater/screens/select_movie/avatar_page_view.dart';
 
 class MovieDescription extends StatefulWidget {
-  const MovieDescription({Key? key}) : super(key: key);
+  const MovieDescription({
+    required this.movie,
+    Key? key,
+  }) : super(key: key);
+
+  final Movie movie;
 
   @override
   State<MovieDescription> createState() => _MovieDescriptionState();
 }
 
 class _MovieDescriptionState extends State<MovieDescription> {
-  final PageController pageController = PageController(viewportFraction: 0.34);
+  final PageController pageControllerActors =
+      PageController(viewportFraction: 0.34);
+  final PageController pageControllerWriters =
+      PageController(viewportFraction: 0.34);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class _MovieDescriptionState extends State<MovieDescription> {
       children: [
         Center(
           child: Text(
-            'Director',
+            'Director: ${widget.movie.director}',
             style: textStyle,
             textAlign: TextAlign.center,
           ),
@@ -37,37 +47,9 @@ class _MovieDescriptionState extends State<MovieDescription> {
           style: textStyleTitle,
         ),
         SizedBox(height: 20),
-        SizedBox(
-          height: 180,
-          child: PageView(
-            padEnds: false,
-            controller: pageController,
-            children: List.generate(
-              4,
-              (index) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(35),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade700,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      size: 35,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Lorem Ipsum',
-                    style: textStyle,
-                  ),
-                ],
-              ),
-            ),
-          ),
+        AvatarPageView(
+          pageController: pageControllerActors,
+          names: widget.movie.actors,
         ),
         Text(
           'Introduction',
@@ -75,11 +57,22 @@ class _MovieDescriptionState extends State<MovieDescription> {
         ),
         SizedBox(height: 15),
         Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nec luctus erat. Curabitur ultricies massa quis justo viverra, a euismod nulla rutrum. Sed non mauris eros. Duis quam nunc, porttitor cursus dolor id, luctus viverra purus. Nulla auctor libero vitae eros aliquam, nec eleifend sapien mattis. Ut luctus et neque in tincidunt. Morbi egestas maximus erat ac ultricies. Sed tristique mi quis eros faucibus, quis finibus diam eleifend. Nullam dictum sodales sagittis. Sed pharetra massa sed urna pellentesque dictum. Sed pretium condimentum eros, cursus blandit nulla vestibulum et. Quisque sed accumsan orci. Nullam laoreet ipsum placerat, pellentesque ligula eu, porta orci. Sed sit amet orci dignissim, venenatis urna in, laoreet nisl. Etiam quis purus id augue porta pharetra.',
+          widget.movie.description,
           style: textStyle,
           textAlign: TextAlign.justify,
         ),
-        SizedBox(height: 250),
+        SizedBox(height: 40),
+        Text(
+          'Writers',
+          style: textStyleTitle,
+        ),
+        SizedBox(height: 20),
+        AvatarPageView(
+          pageController: pageControllerWriters,
+          names: widget.movie.writers,
+          flipColors: true,
+        ),
+        SizedBox(height: 200),
       ],
     );
   }

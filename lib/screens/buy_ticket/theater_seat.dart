@@ -50,25 +50,28 @@ class _TheaterSeatState extends State<TheaterSeat>
       chairColor = Color(0xffF51933);
     }
     return ScaleTransition(
-      scale: isSelected ? selectAnimation : widget.scaleAnimation,
-      child: Container(
-        margin: EdgeInsets.only(top: 4),
-        child: GestureDetector(
-          onTap: () {
-            if (!widget.isTaken) {
-              setState(() {
-                isSelected = !isSelected;
-              });
-              animationController.forward().whenComplete(
-                    () => animationController.reverse(),
-                  );
-              widget.onSelected?.call(isSelected);
-            }
-          },
-          child: Icon(
-            Icons.chair,
-            color: chairColor,
-            size: 23,
+      scale: widget.scaleAnimation,
+      child: ScaleTransition(
+        scale: selectAnimation,
+        child: Container(
+          margin: EdgeInsets.only(top: 4),
+          child: GestureDetector(
+            onTap: () {
+              if (!widget.isTaken) {
+                setState(() {
+                  isSelected = !isSelected;
+                });
+                animationController.forward().whenComplete(
+                      () => animationController.reverse(),
+                    );
+                widget.onSelected?.call(isSelected);
+              }
+            },
+            child: Icon(
+              Icons.chair,
+              color: chairColor,
+              size: 23,
+            ),
           ),
         ),
       ),

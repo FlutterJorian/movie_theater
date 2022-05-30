@@ -23,7 +23,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
     'November',
     'December',
   ];
-  final PageController pageController = PageController(viewportFraction: 0.3);
+  final PageController pageController = PageController(viewportFraction: 0.33);
   int? selectedIndex;
 
   @override
@@ -86,7 +86,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
         SizedBox(width: 15),
         Expanded(
           child: SizedBox(
-            height: 25,
+            height: 26,
             child: PageView.builder(
               itemCount: times.length,
               padEnds: false,
