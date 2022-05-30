@@ -14,7 +14,7 @@ class NumberAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 16,
+      height: 20,
       width: 9,
       child: AnimatedBuilder(
         animation: numberAnimation,
@@ -33,6 +33,7 @@ class NumberAnimation extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
+                      textAlign: TextAlign.center,
                     );
                   },
                 ),

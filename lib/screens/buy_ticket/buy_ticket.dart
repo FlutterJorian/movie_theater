@@ -28,7 +28,7 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
   double number2 = 0;
   double number3 = 0;
 
-  final numSize = 16;
+  final numSize = 20;
 
   bool switchAn = false;
 

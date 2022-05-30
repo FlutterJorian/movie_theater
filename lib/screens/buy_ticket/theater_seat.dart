@@ -68,7 +68,7 @@ class _TheaterSeatState extends State<TheaterSeat>
           child: Icon(
             Icons.chair,
             color: chairColor,
-            size: 24,
+            size: 23,
           ),
         ),
       ),

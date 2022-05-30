@@ -14,9 +14,10 @@ class TheaterSeats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const seatMargin = 4.0;
-    const seatSize = 24.0;
+    const seatSize = 23.0;
     const totalseatSize = seatSize + seatMargin;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
