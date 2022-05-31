@@ -52,17 +52,6 @@ class MovieTheaterRoute {
               actors: ['Joaquin Phoenix', 'Robert De Niro', 'Zazie Beetz'],
             ),
             Movie(
-              title: 'Avatar',
-              image: 'avatar.jpg',
-              rating: 7.2,
-              genres: ['Action', 'Adventure', 'Sci-Fi'],
-              description:
-                  "Jake Sully lives with his newfound family formed on the planet of Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their planet.",
-              director: 'James Cameron',
-              writers: ['James Cameron', 'Josh Friedman'],
-              actors: ['Michelle Yeoh', 'Zoe Saldana', 'Sam Worthington'],
-            ),
-            Movie(
               title: 'Prey',
               image: 'prey.jpg',
               rating: 6.8,

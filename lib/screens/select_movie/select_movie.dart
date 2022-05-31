@@ -72,13 +72,13 @@ class _SelectMovieState extends State<SelectMovie>
         curve: Interval(0.0, 0.4),
       ),
     );
-    titleAnimation = Tween<double>(begin: 295, end: 0).animate(
+    titleAnimation = Tween<double>(begin: 286, end: 0).animate(
       CurvedAnimation(
         parent: animationController1,
         curve: Interval(0.2, 0.8, curve: Curves.linear),
       ),
     );
-    var starTween = Tween<double>(begin: 374, end: 79);
+    var starTween = Tween<double>(begin: 374, end: 85);
     var starCurve = Interval(
       0.2,
       1.0,
@@ -322,6 +322,7 @@ class _SelectMovieState extends State<SelectMovie>
                       child: ScaleTransition(
                         scale: imageAnimation,
                         child: MoviePoster(
+                          width: 193,
                           image: movie.image,
                         ),
                       ),
@@ -342,8 +343,8 @@ class _SelectMovieState extends State<SelectMovie>
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                            Transform.translate(
+                              offset: Offset(0, 7),
                               child: StarRatingAnimated(
                                 starAnimations: starsAnimations,
                                 rating: movie.rating,
@@ -352,7 +353,7 @@ class _SelectMovieState extends State<SelectMovie>
                             AnimatedBuilder(
                               animation: dotsAnimation,
                               builder: (context, _) => Transform.translate(
-                                offset: Offset(0, 402),
+                                offset: Offset(0, 401),
                                 child: Center(
                                   child: Text(
                                     '...',
@@ -375,7 +376,7 @@ class _SelectMovieState extends State<SelectMovie>
                                   animation: descTransformAnimation,
                                   builder: (context, _) => Transform.translate(
                                     offset: Offset(
-                                        0, 115 + descTransformAnimation.value),
+                                        0, 118 + descTransformAnimation.value),
                                     child: MovieDescription(
                                       movie: movie,
                                     ),

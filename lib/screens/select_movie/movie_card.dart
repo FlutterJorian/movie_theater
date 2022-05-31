@@ -26,13 +26,12 @@ class MovieCard extends StatelessWidget {
     const alphaMax = 255;
     var alpha = (alphaMax - (alphaMax * diff)).clamp(100, alphaMax).toInt();
 
+    var currentPageRounded = currentPage.round();
     var offset = 0.0;
-    if (diff == 1) {
-      if (currentPage - index < 0) {
-        offset -= animationValue;
-      } else {
-        offset += animationValue;
-      }
+    if (index > currentPageRounded) {
+      offset -= animationValue;
+    } else if (index < currentPageRounded) {
+      offset += animationValue;
     }
     return Transform.translate(
       offset: Offset(offset, 0),
