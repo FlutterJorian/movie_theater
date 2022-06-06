@@ -26,6 +26,7 @@ class _SelectMovieState extends State<SelectMovie>
     viewportFraction: 0.70,
   );
   double currentPage = 9999999;
+  double previousPage = 9999999;
 
   final ScrollController scrollController = ScrollController();
   double currentScrollOffset = 0.0;
@@ -218,6 +219,7 @@ class _SelectMovieState extends State<SelectMovie>
     var pageIndex = currentPage.round();
     var indexMovie = pageIndex % widget.movies.length;
     var movie = widget.movies[indexMovie];
+
     return WillPopScope(
       onWillPop: () async {
         back();
@@ -228,27 +230,68 @@ class _SelectMovieState extends State<SelectMovie>
         body: Stack(
           children: [
             if (isPageViewEnabled) ...[
+              // AnimatedBuilder(
+              //   animation: pageController,
+              //   builder: (context, _) {
+              //     return Viewport(
+              //       axisDirection: AxisDirection.left,
+              //       slivers: [
+              //         SliverFillViewport(
+              //           delegate: SliverChildBuilderDelegate(
+              //             (context, index) {
+              //               var movieIndex = index % widget.movies.length;
+              //               return MoviePoster(
+              //                 image: widget.movies[movieIndex].image,
+              //                 isFullscreen: true,
+              //               );
+              //             },
+              //           ),
+              //         ),
+              //       ],
+              //       offset: ViewportOffset.fixed(
+              //         MediaQuery.of(context).size.width * currentPage,
+              //       ),
+              //     );
+              //   },
+              // ),
+
               AnimatedBuilder(
                 animation: pageController,
                 builder: (context, _) {
-                  return Viewport(
-                    axisDirection: AxisDirection.left,
-                    slivers: [
-                      SliverFillViewport(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            var movieIndex = index % widget.movies.length;
-                            return MoviePoster(
-                              image: widget.movies[movieIndex].image,
-                              isFullscreen: true,
-                            );
-                          },
+                  if (currentPage == (previousPage + 1)) {
+                    previousPage = currentPage;
+                  }
+
+                  var bgImage = widget
+                      .movies[(previousPage.round() + 1) % widget.movies.length]
+                      .image;
+                  // if (currentPage > previousPage) {
+                  //   if (currentPage == (previousPage + 1)) {
+                  //     previousPage = currentPage;
+                  //   }
+                  // } else if (currentPage < previousPage) {
+                  //   if (currentPage == (previousPage - 1)) {
+                  //     previousPage = currentPage;
+                  //   }
+                  // }
+
+                  return Stack(
+                    children: [
+                      MoviePoster(
+                        image: bgImage,
+                        isFullscreen: true,
+                      ),
+                      Transform.translate(
+                        offset: Offset(
+                            MediaQuery.of(context).size.width *
+                                (previousPage - currentPage),
+                            0),
+                        child: MoviePoster(
+                          image: widget.movies[1].image,
+                          isFullscreen: true,
                         ),
                       ),
                     ],
-                    offset: ViewportOffset.fixed(
-                      MediaQuery.of(context).size.width * currentPage,
-                    ),
                   );
                 },
               ),
