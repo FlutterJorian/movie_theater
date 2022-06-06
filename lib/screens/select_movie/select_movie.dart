@@ -4,10 +4,8 @@ import 'package:movie_theater/main.dart';
 import 'package:movie_theater/models/movie.dart';
 import 'package:movie_theater/screens/select_movie/background_cards.dart';
 import 'package:movie_theater/screens/select_movie/movie_card.dart';
-import 'package:movie_theater/screens/select_movie/movie_description.dart';
+import 'package:movie_theater/screens/select_movie/movie_card_animated.dart';
 import 'package:movie_theater/screens/select_movie/movie_poster.dart';
-import 'package:movie_theater/screens/select_movie/movie_title.dart';
-import 'package:movie_theater/screens/select_movie/star_rating_animated.dart';
 
 class SelectMovie extends StatefulWidget {
   const SelectMovie({
@@ -37,7 +35,7 @@ class _SelectMovieState extends State<SelectMovie>
   late Animation<double> titleAnimation;
   List<Animation<double>> starsAnimations = [];
   Animation<double>? _cardAnimation;
-  var cardSize = 200.0;
+  var cardSize = 260.0;
   late Animation<double> dotsAnimation;
   late Animation<double> leftRightCardAnimation;
   late Animation<double> descTransformAnimation;
@@ -72,13 +70,13 @@ class _SelectMovieState extends State<SelectMovie>
         curve: Interval(0.0, 0.4),
       ),
     );
-    titleAnimation = Tween<double>(begin: 286, end: 0).animate(
+    titleAnimation = Tween<double>(begin: 295, end: 0).animate(
       CurvedAnimation(
         parent: animationController1,
         curve: Interval(0.2, 0.8, curve: Curves.linear),
       ),
     );
-    var starTween = Tween<double>(begin: 374, end: 85);
+    var starTween = Tween<double>(begin: 385, end: 85);
     var starCurve = Interval(
       0.2,
       1.0,
@@ -99,7 +97,7 @@ class _SelectMovieState extends State<SelectMovie>
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cardAnimation =
-          Tween<double>(begin: 200, end: MediaQuery.of(context).size.width)
+          Tween<double>(begin: 260, end: MediaQuery.of(context).size.width)
               .animate(
         CurvedAnimation(
           parent: animationController1,
@@ -283,16 +281,20 @@ class _SelectMovieState extends State<SelectMovie>
             ),
             Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 3.5),
+                top: MediaQuery.of(context).size.height / 3.5,
+              ),
               child: Stack(
-                alignment: Alignment.topCenter,
                 children: [
                   PageView.builder(
                     physics: isPageViewEnabled
                         ? null
                         : NeverScrollableScrollPhysics(),
                     controller: pageController,
-                    itemBuilder: (context, index) => AnimatedBuilder(
+                    itemBuilder: (context, index) {
+                      // if (!isPageViewEnabled && pageIndex == index) {
+                      //   return SizedBox.shrink();
+                      // } else {
+                      return AnimatedBuilder(
                         animation: leftRightCardAnimation,
                         builder: (context, _) {
                           var movieIndex = index % widget.movies.length;
@@ -303,90 +305,22 @@ class _SelectMovieState extends State<SelectMovie>
                             pageController: pageController,
                             animationValue: leftRightCardAnimation.value,
                           );
-                        }),
+                        },
+                      );
+                      // }
+                    },
                   ),
                   if (!isPageViewEnabled) ...[
-                    Container(
-                      width: cardSize,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                        color: Colors.white,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: ScaleTransition(
-                        scale: imageAnimation,
-                        child: MoviePoster(
-                          width: 193,
-                          image: movie.image,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 20),
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        physics: BouncingScrollPhysics(),
-                        child: Stack(
-                          children: [
-                            AnimatedBuilder(
-                              animation: titleAnimation,
-                              builder: (context, _) => Transform.translate(
-                                offset: Offset(0, titleAnimation.value),
-                                child: MovieTitle(
-                                  movie: movie,
-                                ),
-                              ),
-                            ),
-                            Transform.translate(
-                              offset: Offset(0, 7),
-                              child: StarRatingAnimated(
-                                starAnimations: starsAnimations,
-                                rating: movie.rating,
-                              ),
-                            ),
-                            AnimatedBuilder(
-                              animation: dotsAnimation,
-                              builder: (context, _) => Transform.translate(
-                                offset: Offset(0, 401),
-                                child: Center(
-                                  child: Text(
-                                    '...',
-                                    style: TextStyle(
-                                      height: 0.9,
-                                      color: Colors.grey.shade800
-                                          .withOpacity(dotsAnimation.value),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            AnimatedBuilder(
-                              animation: descFadeInAnimation,
-                              builder: (context, _) => Opacity(
-                                opacity: descFadeInAnimation.value,
-                                child: AnimatedBuilder(
-                                  animation: descTransformAnimation,
-                                  builder: (context, _) => Transform.translate(
-                                    offset: Offset(
-                                        0, 118 + descTransformAnimation.value),
-                                    child: MovieDescription(
-                                      movie: movie,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    MovieCardAnimated(
+                      cardSize: cardSize,
+                      scrollController: scrollController,
+                      titleAnimation: titleAnimation,
+                      movie: movie,
+                      starsAnimations: starsAnimations,
+                      dotsAnimation: dotsAnimation,
+                      descFadeInAnimation: descFadeInAnimation,
+                      descTransformAnimation: descTransformAnimation,
+                      imageAnimation: imageAnimation,
                     ),
                   ],
                 ],
@@ -433,7 +367,7 @@ class _SelectMovieState extends State<SelectMovie>
                   child: Container(
                     width: !animationControllerTransition.isAnimating &&
                             !animationControllerTransition.isCompleted
-                        ? cardSize + 20
+                        ? cardSize - 40
                         : buttonWidth,
                     height: 50,
                     margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
