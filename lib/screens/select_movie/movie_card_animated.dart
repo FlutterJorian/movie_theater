@@ -36,7 +36,6 @@ class MovieCardAnimated extends StatelessWidget {
       children: [
         Container(
           width: cardSize,
-          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(40),
@@ -55,7 +54,10 @@ class MovieCardAnimated extends StatelessWidget {
               children: [
                 ScaleTransition(
                   scale: imageAnimation,
-                  child: MoviePoster(image: movie.image),
+                  child: MoviePoster(
+                    image: movie.image,
+                    width: MediaQuery.of(context).size.width / 1.9875,
+                  ),
                 ),
                 AnimatedBuilder(
                   animation: titleAnimation,

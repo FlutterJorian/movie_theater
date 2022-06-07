@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:movie_theater/main.dart';
 import 'package:movie_theater/models/movie.dart';
 import 'package:movie_theater/screens/select_movie/background_cards.dart';
@@ -77,7 +76,7 @@ class _SelectMovieState extends State<SelectMovie>
         curve: Interval(0.2, 0.8, curve: Curves.linear),
       ),
     );
-    var starTween = Tween<double>(begin: 385, end: 85);
+    var starTween = Tween<double>(begin: 385, end: 90);
     var starCurve = Interval(
       0.2,
       1.0,
@@ -97,17 +96,23 @@ class _SelectMovieState extends State<SelectMovie>
       starsAnimations.add(starAnimation);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _cardAnimation =
-          Tween<double>(begin: 260, end: MediaQuery.of(context).size.width)
-              .animate(
+      _cardAnimation = Tween<double>(
+              begin: MediaQuery.of(context).size.width / 1.6,
+              end: MediaQuery.of(context).size.width)
+          .animate(
         CurvedAnimation(
           parent: animationController1,
           curve: Interval(0.2, 0.8),
         ),
       )..addListener(() => setState(() {
-                cardSize = _cardAnimation!.value;
-              }));
+            cardSize = _cardAnimation!.value;
+          }));
+
+      setState(() {
+        cardSize = MediaQuery.of(context).size.width / 1.6;
+      });
     });
+
     dotsAnimation =
         Tween<double>(begin: 1, end: 0).animate(animationController1);
     leftRightCardAnimation = Tween<double>(begin: 0, end: 275).animate(
@@ -254,40 +259,37 @@ class _SelectMovieState extends State<SelectMovie>
               //     );
               //   },
               // ),
-
               AnimatedBuilder(
                 animation: pageController,
                 builder: (context, _) {
-                  if (currentPage == (previousPage + 1)) {
+                  if (currentPage.floor() == previousPage.floor() + 1 ||
+                      currentPage.floor() == previousPage.floor() - 1) {
                     previousPage = currentPage;
                   }
-
                   var bgImage = widget
-                      .movies[(previousPage.round() + 1) % widget.movies.length]
+                      .movies[(previousPage.round()) % widget.movies.length]
                       .image;
-                  // if (currentPage > previousPage) {
-                  //   if (currentPage == (previousPage + 1)) {
-                  //     previousPage = currentPage;
-                  //   }
-                  // } else if (currentPage < previousPage) {
-                  //   if (currentPage == (previousPage - 1)) {
-                  //     previousPage = currentPage;
-                  //   }
-                  // }
 
+                  var slidingImageIndex = previousPage.round() - 1;
+                  if (currentPage > previousPage) {
+                    slidingImageIndex = previousPage.round() + 1;
+                  }
                   return Stack(
                     children: [
                       MoviePoster(
-                        image: bgImage,
+                        image: widget
+                            .movies[slidingImageIndex % widget.movies.length]
+                            .image,
                         isFullscreen: true,
                       ),
                       Transform.translate(
                         offset: Offset(
-                            MediaQuery.of(context).size.width *
-                                (previousPage - currentPage),
-                            0),
+                          -MediaQuery.of(context).size.width *
+                              (previousPage - currentPage),
+                          0,
+                        ),
                         child: MoviePoster(
-                          image: widget.movies[1].image,
+                          image: bgImage,
                           isFullscreen: true,
                         ),
                       ),

@@ -19,7 +19,6 @@ class MovieCard extends StatelessWidget {
   final double currentPage;
   final PageController pageController;
   final double animationValue;
-
   @override
   Widget build(BuildContext context) {
     var diff = (currentPage - index).abs();
