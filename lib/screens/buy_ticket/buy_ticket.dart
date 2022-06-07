@@ -25,6 +25,8 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
   late Tween<double> numberAnimationTween3;
   late Animation<double> numberAnimation3;
 
+  late Animation<double> fadeInAnimation;
+
   double number1 = 0;
   double number2 = 0;
   double number3 = 0;
@@ -80,6 +82,12 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
     numberAnimationTween3 = Tween<double>(begin: 0.0, end: 20);
     numberAnimation3 = numberAnimationTween3.animate(numberAnimationController);
 
+    fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(0.6, 1.0),
+      ),
+    );
     animationController.forward();
     super.initState();
   }
@@ -101,47 +109,52 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
                 Spacer(),
                 TheaterSeats(
                   onSelected: (selected) {
-                    if (selected) {
-                      animateToNumber();
-                    }
+                    if (selected) animateToNumber(add: selected);
                   },
                   seatRowAnimations: seatRowAnimations,
                 ),
                 SizedBox(height: 40),
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.circle,
-                      color: Color(0xffB3B3C3),
-                      size: 10,
-                    ),
-                    SizedBox(width: 5),
-                    Text('Available', style: textStyle),
-                    Spacer(),
-                    Icon(
-                      Icons.circle,
-                      color: Color(0xff2C2B37),
-                      size: 10,
-                    ),
-                    SizedBox(width: 5),
-                    Text('Taken', style: textStyle),
-                    Spacer(),
-                    Icon(
-                      Icons.circle,
-                      color: Color(0xffF51933),
-                      size: 10,
-                    ),
-                    SizedBox(width: 5),
-                    Text('Selected', style: textStyle),
-                  ],
+                FadeTransition(
+                  opacity: fadeInAnimation,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.circle,
+                            color: Color(0xffB3B3C3),
+                            size: 10,
+                          ),
+                          SizedBox(width: 5),
+                          Text('Available', style: textStyle),
+                          Spacer(),
+                          Icon(
+                            Icons.circle,
+                            color: Color(0xff2C2B37),
+                            size: 10,
+                          ),
+                          SizedBox(width: 5),
+                          Text('Taken', style: textStyle),
+                          Spacer(),
+                          Icon(
+                            Icons.circle,
+                            color: Color(0xffF51933),
+                            size: 10,
+                          ),
+                          SizedBox(width: 5),
+                          Text('Selected', style: textStyle),
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      Divider(color: Color(0xff2C2B37), thickness: 0.5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: DateTimeSelector(),
+                      ),
+                      Divider(color: Color(0xff2C2B37), thickness: 0.5),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 30),
-                Divider(color: Color(0xff2C2B37), thickness: 0.5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: DateTimeSelector(),
-                ),
-                Divider(color: Color(0xff2C2B37), thickness: 0.5),
                 SizedBox(height: 30),
                 AnimatedBuilder(
                   animation: buttonAnimation,
@@ -227,16 +240,26 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
     );
   }
 
-  void animateToNumber() {
+  void animateToNumber({bool add = true}) {
     var num1 = number1;
     var num2 = number2 + numSize;
     var num3 = number3 + (numSize * 2);
 
+    if (!add) {
+      num2 = number2 - numSize;
+      num3 = number3 - (numSize * 2);
+    }
+
     if ((num3 / numSize) % 10 == 0) {
       num2 = num2 + numSize;
+    } else if ((num3 / numSize) % 10 == 9 && !add) {
+      num2 = num2 - numSize;
     }
+
     if ((num2 / numSize) % 10 == 0) {
       num1 = num1 + numSize;
+    } else if ((num2 / numSize) % 10 == 9 && !add) {
+      num1 = num1 - numSize;
     }
 
     if (number3 != num3) {

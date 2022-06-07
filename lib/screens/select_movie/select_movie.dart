@@ -264,7 +264,7 @@ class _SelectMovieState extends State<SelectMovie>
                 builder: (context, _) {
                   if (currentPage.floor() == previousPage.floor() + 1 ||
                       currentPage.floor() == previousPage.floor() - 1) {
-                    previousPage = currentPage;
+                    previousPage = currentPage.floor().toDouble();
                   }
                   var bgImage = widget
                       .movies[(previousPage.round()) % widget.movies.length]
