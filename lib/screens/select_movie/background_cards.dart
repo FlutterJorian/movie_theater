@@ -76,7 +76,7 @@ class BackgroundCards extends StatelessWidget {
                 return Transform.translate(
                   offset: Offset(0, bgCardCenterAnimation.value),
                   child: Container(
-                    margin: EdgeInsets.only(top: 60),
+                    margin: const EdgeInsets.only(top: 60),
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: MoviePoster(

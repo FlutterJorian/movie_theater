@@ -36,7 +36,7 @@ class MovieCardAnimated extends StatelessWidget {
       children: [
         Container(
           width: cardSize,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(40),
               topRight: Radius.circular(40),
@@ -45,10 +45,10 @@ class MovieCardAnimated extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+          margin: const EdgeInsets.only(left: 30, right: 30, top: 20),
           child: SingleChildScrollView(
             controller: scrollController,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -75,7 +75,7 @@ class MovieCardAnimated extends StatelessWidget {
                 AnimatedBuilder(
                   animation: dotsAnimation,
                   builder: (context, _) => Transform.translate(
-                    offset: Offset(0, 405),
+                    offset: const Offset(0, 405),
                     child: Center(
                       child: Text(
                         '...',

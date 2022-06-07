@@ -17,10 +17,10 @@ class StarRating extends StatelessWidget {
             color: Colors.grey.shade700,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         ...List.generate(
           4,
-          (index) => Icon(
+          (index) => const Icon(
             Icons.star,
             color: Colors.deepOrangeAccent,
             size: 15,

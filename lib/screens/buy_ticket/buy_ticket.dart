@@ -44,7 +44,7 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
     const rows = 10;
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 950),
+      duration: const Duration(milliseconds: 950),
     );
     for (var i = 0; i < rows; i++) {
       var seatRowAnimation = Tween<double>(begin: 0, end: 1).animate(
@@ -57,22 +57,22 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
     }
 
     buttonAnimation = Tween<Offset>(
-      begin: Offset(0, 150),
+      begin: const Offset(0, 150),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(0.4, 0.6),
+        curve: const Interval(0.4, 0.6),
       ),
     );
 
     numberAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
     );
     numberAnimationController2 = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
     );
     numberAnimationTween1 = Tween<double>(begin: 0.0, end: 20);
     numberAnimation1 =
@@ -85,7 +85,7 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
     fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(0.6, 1.0),
+        curve: const Interval(0.6, 1.0),
       ),
     );
     animationController.forward();
@@ -103,17 +103,17 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30, vertical: 60),
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
             child: Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 TheaterSeats(
                   onSelected: (selected) {
-                    if (selected) animateToNumber(add: selected);
+                    animateToNumber(add: selected);
                   },
                   seatRowAnimations: seatRowAnimations,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 FadeTransition(
                   opacity: fadeInAnimation,
                   child: Column(
@@ -145,17 +145,17 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
                           Text('Selected', style: textStyle),
                         ],
                       ),
-                      SizedBox(height: 30),
-                      Divider(color: Color(0xff2C2B37), thickness: 0.5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      const SizedBox(height: 30),
+                      const Divider(color: Color(0xff2C2B37), thickness: 0.5),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
                         child: DateTimeSelector(),
                       ),
-                      Divider(color: Color(0xff2C2B37), thickness: 0.5),
+                      const Divider(color: Color(0xff2C2B37), thickness: 0.5),
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 AnimatedBuilder(
                   animation: buttonAnimation,
                   builder: (context, _) => Transform.translate(
@@ -173,18 +173,15 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
                         width: 450,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                            colors: const [
-                              Color(0xffC4562F),
-                              Color(0xffF51933)
-                            ],
+                          gradient: const LinearGradient(
+                            colors: [Color(0xffC4562F), Color(0xffF51933)],
                           ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                               child: Text(
                                 'PAY €',
@@ -219,14 +216,14 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 50, left: 20),
+            margin: const EdgeInsets.only(top: 50, left: 20),
             child: GestureDetector(
               onTap: () {
                 animationController.reverse().whenComplete(
                       () => Navigator.pop(context),
                     );
               },
-              child: Align(
+              child: const Align(
                 alignment: Alignment.topLeft,
                 child: Icon(
                   Icons.close,
@@ -241,53 +238,44 @@ class _BuyTicketState extends State<BuyTicket> with TickerProviderStateMixin {
   }
 
   void animateToNumber({bool add = true}) {
-    var num1 = number1;
-    var num2 = number2 + numSize;
-    var num3 = number3 + (numSize * 2);
+    if (add) {
+      var num1 = number1;
+      var num2 = number2 + numSize;
+      var num3 = number3 + (numSize * 2);
 
-    if (!add) {
-      num2 = number2 - numSize;
-      num3 = number3 - (numSize * 2);
-    }
+      if ((num3 / numSize) % 10 == 0) {
+        num2 = num2 + numSize;
+      }
+      if ((num2 / numSize) % 10 == 0) {
+        num1 = num1 + numSize;
+      }
+      if (number3 != num3) {
+        var end = num3;
+        numberAnimationTween3.begin = number3;
+        numberAnimationTween3.end = end;
+      }
+      if (number2 != num2) {
+        var end = num2;
+        numberAnimationTween2.begin = number2;
+        numberAnimationTween2.end = end;
+      }
+      if (number1 != num1) {
+        var end = num1;
+        numberAnimationTween1.begin = number1;
+        numberAnimationTween1.end = end;
 
-    if ((num3 / numSize) % 10 == 0) {
-      num2 = num2 + numSize;
-    } else if ((num3 / numSize) % 10 == 9 && !add) {
-      num2 = num2 - numSize;
-    }
-
-    if ((num2 / numSize) % 10 == 0) {
-      num1 = num1 + numSize;
-    } else if ((num2 / numSize) % 10 == 9 && !add) {
-      num1 = num1 - numSize;
-    }
-
-    if (number3 != num3) {
-      var end = num3;
-      numberAnimationTween3.begin = number3;
-      numberAnimationTween3.end = end;
-    }
-    if (number2 != num2) {
-      var end = num2;
-      numberAnimationTween2.begin = number2;
-      numberAnimationTween2.end = end;
-    }
-    if (number1 != num1) {
-      var end = num1;
-      numberAnimationTween1.begin = number1;
-      numberAnimationTween1.end = end;
-
-      setState(() {
-        number1 = numberAnimationTween1.end!;
-      });
-      numberAnimationController2.reset();
-      numberAnimationController2.forward();
-    }
-    if (number2 != num3 || number2 != num2) {
-      numberAnimationController.reset();
-      numberAnimationController.forward();
-      number2 = numberAnimationTween2.end!;
-      number3 = numberAnimationTween3.end!;
+        setState(() {
+          number1 = numberAnimationTween1.end!;
+        });
+        numberAnimationController2.reset();
+        numberAnimationController2.forward();
+      }
+      if (number2 != num3 || number2 != num2) {
+        numberAnimationController.reset();
+        numberAnimationController.forward();
+        number2 = numberAnimationTween2.end!;
+        number3 = numberAnimationTween3.end!;
+      }
     }
   }
 }

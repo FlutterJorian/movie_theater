@@ -29,10 +29,10 @@ class StarRatingAnimated extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Transform.translate(
                 offset: Offset(0, starAnimations[0].value),
-                child: Icon(
+                child: const Icon(
                   Icons.star,
                   color: Colors.deepOrangeAccent,
                   size: 15,
@@ -45,7 +45,7 @@ class StarRatingAnimated extends StatelessWidget {
           animation: starAnimations[1],
           builder: (context, _) => Transform.translate(
             offset: Offset(0, starAnimations[1].value),
-            child: Icon(
+            child: const Icon(
               Icons.star,
               color: Colors.deepOrangeAccent,
               size: 15,
@@ -56,7 +56,7 @@ class StarRatingAnimated extends StatelessWidget {
           animation: starAnimations[2],
           builder: (context, _) => Transform.translate(
             offset: Offset(0, starAnimations[2].value),
-            child: Icon(
+            child: const Icon(
               Icons.star,
               color: Colors.deepOrangeAccent,
               size: 15,
@@ -67,7 +67,7 @@ class StarRatingAnimated extends StatelessWidget {
           animation: starAnimations[3],
           builder: (context, _) => Transform.translate(
             offset: Offset(0, starAnimations[3].value),
-            child: Icon(
+            child: const Icon(
               Icons.star,
               color: Colors.deepOrangeAccent,
               size: 15,

@@ -5,6 +5,7 @@ import 'package:movie_theater/screens/select_movie/background_cards.dart';
 import 'package:movie_theater/screens/select_movie/movie_card.dart';
 import 'package:movie_theater/screens/select_movie/movie_card_animated.dart';
 import 'package:movie_theater/screens/select_movie/movie_poster.dart';
+import 'package:movie_theater/screens/select_movie/next_button.dart';
 
 class SelectMovie extends StatefulWidget {
   const SelectMovie({
@@ -62,22 +63,22 @@ class _SelectMovieState extends State<SelectMovie>
     // Animation Controller 1
     animationController1 = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
     );
     imageAnimation = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
         parent: animationController1,
-        curve: Interval(0.0, 0.4),
+        curve: const Interval(0.0, 0.4),
       ),
     );
     titleAnimation = Tween<double>(begin: 295, end: 0).animate(
       CurvedAnimation(
         parent: animationController1,
-        curve: Interval(0.2, 0.8, curve: Curves.linear),
+        curve: const Interval(0.2, 0.8, curve: Curves.linear),
       ),
     );
     var starTween = Tween<double>(begin: 385, end: 90);
-    var starCurve = Interval(
+    const starCurve = Interval(
       0.2,
       1.0,
       curve: Cubic(.81, .87, .59, 1.18),
@@ -102,7 +103,7 @@ class _SelectMovieState extends State<SelectMovie>
           .animate(
         CurvedAnimation(
           parent: animationController1,
-          curve: Interval(0.2, 0.8),
+          curve: const Interval(0.2, 0.8),
         ),
       )..addListener(() => setState(() {
             cardSize = _cardAnimation!.value;
@@ -118,12 +119,12 @@ class _SelectMovieState extends State<SelectMovie>
     leftRightCardAnimation = Tween<double>(begin: 0, end: 275).animate(
       CurvedAnimation(
         parent: animationController1,
-        curve: Interval(0.2, 0.8),
+        curve: const Interval(0.2, 0.8),
       ),
     );
     var interval = CurvedAnimation(
       parent: animationController1,
-      curve: Interval(0.5, 1),
+      curve: const Interval(0.5, 1),
     );
     descTransformAnimation =
         Tween<double>(begin: 400, end: 0).animate(interval);
@@ -132,7 +133,7 @@ class _SelectMovieState extends State<SelectMovie>
     // Animation Controller 2
     animationController2 = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
     );
     var bgCardCurve = Curves.easeOutBack;
     var bgCardTween = Tween<double>(begin: 160, end: 0);
@@ -170,7 +171,7 @@ class _SelectMovieState extends State<SelectMovie>
     // Transition animations
     animationControllerTransition = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _buttonWidthAnimation =
@@ -178,7 +179,7 @@ class _SelectMovieState extends State<SelectMovie>
               .animate(
         CurvedAnimation(
           parent: animationControllerTransition,
-          curve: Interval(0, 0.5),
+          curve: const Interval(0, 0.5),
         ),
       )..addListener(() => setState(() {
                 buttonWidth = _buttonWidthAnimation!.value;
@@ -187,7 +188,7 @@ class _SelectMovieState extends State<SelectMovie>
     buttonScaleAnimation = Tween<double>(begin: 1, end: 30).animate(
       CurvedAnimation(
         parent: animationControllerTransition,
-        curve: Interval(0.6, 1.0),
+        curve: const Interval(0.6, 1.0),
       ),
     )..addListener(() {
         buttonColor = Colors.black;
@@ -242,8 +243,8 @@ class _SelectMovieState extends State<SelectMovie>
                       currentPage.floor() == previousPage - 1) {
                     previousPage = currentPage.floor();
                   }
-                  var bgImage = widget
-                      .movies[(previousPage) % widget.movies.length].image;
+                  var bgImage =
+                      widget.movies[previousPage % widget.movies.length].image;
 
                   var slidingImageIndex = previousPage - 1;
                   if (currentPage > previousPage) {
@@ -288,15 +289,15 @@ class _SelectMovieState extends State<SelectMovie>
               )
             ],
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: const [
+                  colors: [
                     Colors.transparent,
                     Colors.white,
                   ],
-                  stops: const [0.30, 0.75],
+                  stops: [0.30, 0.75],
                 ),
               ),
             ),
@@ -309,7 +310,7 @@ class _SelectMovieState extends State<SelectMovie>
                   PageView.builder(
                     physics: isPageViewEnabled
                         ? null
-                        : NeverScrollableScrollPhysics(),
+                        : const NeverScrollableScrollPhysics(),
                     controller: pageController,
                     itemBuilder: (context, index) {
                       // if (!isPageViewEnabled && pageIndex == index) {
@@ -347,83 +348,52 @@ class _SelectMovieState extends State<SelectMovie>
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () {
-                  if (animationController1.isAnimating ||
-                      animationController2.isAnimating ||
-                      animationControllerTransition.isAnimating) return;
-                  if (isPageViewEnabled) {
-                    pageController.jumpToPage(pageIndex);
-                    setState(() {
-                      isPageViewEnabled = false;
-                    });
-                    animationController1.forward();
-                    Future.delayed(
-                      Duration(milliseconds: 300),
-                      () => animationController2.forward(),
-                    );
-                  } else {
-                    animationControllerTransition.forward().whenComplete(() {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => MovieTheaterRoute
-                                  .routes()[MovieTheaterRoute.buyTicket]!
-                              .call(_),
-                        ),
-                      ).whenComplete(
-                        () {
-                          animationControllerTransition.reverse().whenComplete(
-                                () => buttonColor = Colors.grey.shade800,
-                              );
-                        },
-                      );
-                    });
-                  }
-                },
-                child: ScaleTransition(
-                  scale: buttonScaleAnimation,
-                  child: Container(
-                    width: !animationControllerTransition.isAnimating &&
-                            !animationControllerTransition.isCompleted
-                        ? cardSize - 40
-                        : buttonWidth,
-                    height: 50,
-                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 30),
-                    decoration: BoxDecoration(
-                      color: buttonColor,
-                      borderRadius: BorderRadius.circular(
-                        !animationControllerTransition.isAnimating &&
-                                !animationControllerTransition.isCompleted
-                            ? 5
-                            : 25,
+            NextButton(
+              buttonColor: buttonColor,
+              buttonScaleAnimation: buttonScaleAnimation,
+              width: cardSize,
+              widthTransition: buttonWidth,
+              isInTransition: animationControllerTransition.isAnimating ||
+                  animationControllerTransition.isCompleted,
+              onTap: () {
+                if (animationController1.isAnimating ||
+                    animationController2.isAnimating ||
+                    animationControllerTransition.isAnimating) return;
+                if (isPageViewEnabled) {
+                  pageController.jumpToPage(pageIndex);
+                  setState(() {
+                    isPageViewEnabled = false;
+                  });
+                  animationController1.forward();
+                  Future.delayed(
+                    const Duration(milliseconds: 300),
+                    () => animationController2.forward(),
+                  );
+                } else {
+                  animationControllerTransition.forward().whenComplete(() {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (c, __, ___) => MovieTheaterRoute.routes()[
+                                MovieTheaterRoute.buyTicket]!
+                            .call(c),
                       ),
-                    ),
-                    child: !animationControllerTransition.isAnimating &&
-                            !animationControllerTransition.isCompleted
-                        ? Center(
-                            child: Text(
-                              'BUY TICKET',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                  ),
-                ),
-              ),
+                    ).whenComplete(
+                      () {
+                        animationControllerTransition.reverse().whenComplete(
+                              () => buttonColor = Colors.grey.shade800,
+                            );
+                      },
+                    );
+                  });
+                }
+              },
             ),
             Container(
-              margin: EdgeInsets.only(top: 50, left: 20),
+              margin: const EdgeInsets.only(top: 50, left: 20),
               child: GestureDetector(
                 onTap: back,
-                child: Align(
+                child: const Align(
                   alignment: Alignment.topLeft,
                   child: Icon(
                     Icons.close,
@@ -442,7 +412,7 @@ class _SelectMovieState extends State<SelectMovie>
     if (!isPageViewEnabled) {
       animationController2.reverse();
       Future.delayed(
-        Duration(milliseconds: 300),
+        const Duration(milliseconds: 300),
         () => animationController1.reverse().whenComplete(
               () => isPageViewEnabled = true,
             ),

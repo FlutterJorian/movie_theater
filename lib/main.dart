@@ -6,7 +6,7 @@ import 'package:movie_theater/screens/select_movie/select_movie.dart';
 void main() {
   // Flutter 3 bug (https://github.com/flutter/flutter/issues/101007) temp fix:
   WidgetsFlutterBinding.ensureInitialized();
-  Future.delayed(Duration(milliseconds: 200), () {
+  Future.delayed(const Duration(milliseconds: 200), () {
     runApp(const MovieTheater());
   });
 }
@@ -121,7 +121,7 @@ class MovieTheaterRoute {
 
           return SelectMovie(movies: movies);
         },
-        buyTicket: (context) => BuyTicket(),
+        buyTicket: (context) => const BuyTicket(),
       };
 }
 

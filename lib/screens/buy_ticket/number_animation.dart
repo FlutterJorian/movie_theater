@@ -28,7 +28,7 @@ class NumberAnimation extends StatelessWidget {
                     var num = index % 10;
                     return Text(
                       num == 0 && hideZero ? '' : num.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

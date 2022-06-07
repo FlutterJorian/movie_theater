@@ -22,11 +22,11 @@ class _MovieDescriptionState extends State<MovieDescription> {
 
   @override
   Widget build(BuildContext context) {
-    var textStyle = TextStyle(
+    var textStyle = const TextStyle(
       color: Colors.black,
       fontSize: 13,
     );
-    var textStyleTitle = TextStyle(
+    var textStyleTitle = const TextStyle(
       color: Colors.black,
       fontSize: 16,
       fontWeight: FontWeight.w500,
@@ -41,12 +41,12 @@ class _MovieDescriptionState extends State<MovieDescription> {
             textAlign: TextAlign.center,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           'Actors',
           style: textStyleTitle,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         AvatarPageView(
           pageController: pageControllerActors,
           names: widget.movie.actors,
@@ -55,24 +55,24 @@ class _MovieDescriptionState extends State<MovieDescription> {
           'Introduction',
           style: textStyleTitle,
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Text(
           widget.movie.description,
           style: textStyle,
           textAlign: TextAlign.justify,
         ),
-        SizedBox(height: 40),
+        const SizedBox(height: 40),
         Text(
           'Writers',
           style: textStyleTitle,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         AvatarPageView(
           pageController: pageControllerWriters,
           names: widget.movie.writers,
           flipColors: true,
         ),
-        SizedBox(height: 200),
+        const SizedBox(height: 200),
       ],
     );
   }

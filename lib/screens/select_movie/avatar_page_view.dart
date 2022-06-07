@@ -25,7 +25,7 @@ class AvatarPageView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(35),
+                padding: const EdgeInsets.all(35),
                 decoration: BoxDecoration(
                   color: getColor(index, flipped: !flipColors),
                   borderRadius: BorderRadius.circular(5),
@@ -36,10 +36,10 @@ class AvatarPageView extends StatelessWidget {
                   color: getColor(index, flipped: flipColors),
                 ),
               ),
-              SizedBox(height: 10),
+             const  SizedBox(height: 10),
               Text(
                 name,
-                style: TextStyle(
+                style:const  TextStyle(
                   color: Colors.black,
                   fontSize: 13,
                 ),

@@ -32,7 +32,7 @@ class _TheaterSeatState extends State<TheaterSeat>
   void initState() {
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
     );
     selectAnimation = Tween<double>(begin: 1, end: 0.6).animate(
       CurvedAnimation(
@@ -45,16 +45,17 @@ class _TheaterSeatState extends State<TheaterSeat>
 
   @override
   Widget build(BuildContext context) {
-    var chairColor = widget.isTaken ? Color(0xff2C2B37) : Color(0xffB3B3C3);
+    var chairColor =
+        widget.isTaken ? const Color(0xff2C2B37) : const Color(0xffB3B3C3);
     if (isSelected) {
-      chairColor = Color(0xffF51933);
+      chairColor = const Color(0xffF51933);
     }
     return ScaleTransition(
       scale: widget.scaleAnimation,
       child: ScaleTransition(
         scale: selectAnimation,
         child: Container(
-          margin: EdgeInsets.only(top: 4),
+          margin: const EdgeInsets.only(top: 4),
           child: GestureDetector(
             onTap: () {
               if (!widget.isTaken) {

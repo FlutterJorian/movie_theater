@@ -40,28 +40,28 @@ class MovieCard extends StatelessWidget {
           return Container(
             margin: EdgeInsets.only(left: 8, right: 8, top: diff * 30),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(40),
                 topRight: Radius.circular(40),
               ),
               color: Colors.white.withAlpha(alpha),
             ),
             child: Container(
-              margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+              margin: const EdgeInsets.only(left: 30, right: 30, top: 20),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
                   MoviePoster(image: movie.image),
                   Transform.translate(
-                    offset: Offset(0, 295),
+                    offset: const Offset(0, 295),
                     child: MovieTitle(movie: movie),
                   ),
                   Transform.translate(
-                    offset: Offset(0, 385),
+                    offset: const Offset(0, 385),
                     child: StarRating(rating: movie.rating),
                   ),
                   Transform.translate(
-                    offset: Offset(0, 405),
+                    offset: const Offset(0, 405),
                     child: Text(
                       '...',
                       style: TextStyle(

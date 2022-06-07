@@ -52,11 +52,11 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
     return Row(
       children: [
         DropdownButton<DateTime>(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_drop_down,
             color: Colors.white,
           ),
-          underline: SizedBox(),
+          underline: const SizedBox(),
           value: selectedDate,
           style: textStyle2,
           dropdownColor: Colors.black,
@@ -83,7 +83,7 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
             });
           },
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Expanded(
           child: SizedBox(
             height: 26,
@@ -100,17 +100,17 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 15),
+                    margin: const EdgeInsets.only(right: 15),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: selectedIndex != index
                           ? Border.all(
-                              color: Color(0xff2C2B37),
+                              color: const Color(0xff2C2B37),
                               width: 1,
                             )
                           : null,
                       color: selectedIndex == index
-                          ? Color(0xffF51933)
+                          ? const Color(0xffF51933)
                           : Colors.transparent,
                     ),
                     child: Center(
@@ -133,11 +133,11 @@ class _DateTimeSelectorState extends State<DateTimeSelector> {
 
   List<DateTime> getTimes() {
     List<DateTime> datetimes = [];
-    var time = selectedDate.add(Duration(hours: 1));
+    var time = selectedDate.add(const Duration(hours: 1));
     time = DateTime(time.year, time.month, time.day, time.hour);
     while (time.day == selectedDate.day) {
       datetimes.add(time);
-      time = time.add(Duration(minutes: 30));
+      time = time.add(const Duration(minutes: 30));
     }
     return datetimes;
   }

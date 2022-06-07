@@ -22,7 +22,7 @@ class TheaterSeats extends StatelessWidget {
       children: [
         Column(
           children: [
-            SizedBox(height: totalseatSize),
+            const SizedBox(height: totalseatSize),
             TheaterSeat(
                 scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
             TheaterSeat(
@@ -36,10 +36,10 @@ class TheaterSeats extends StatelessWidget {
           ],
         ),
         Container(
-          margin: EdgeInsets.only(top: 4, left: seatMargin),
+          margin: const EdgeInsets.only(top: 4, left: seatMargin),
           child: Column(
             children: [
-              SizedBox(height: totalseatSize),
+              const SizedBox(height: totalseatSize),
               TheaterSeat(
                   scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
               TheaterSeat(
@@ -66,7 +66,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 6, left: seatMargin),
+          margin: const EdgeInsets.only(top: 6, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -101,7 +101,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 8, left: seatMargin),
+          margin: const EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -136,7 +136,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 8, left: seatMargin),
+          margin: const EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -173,7 +173,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 8, left: seatMargin),
+          margin: const EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -210,7 +210,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 8, left: seatMargin),
+          margin: const EdgeInsets.only(top: 8, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -247,7 +247,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 6, left: seatMargin),
+          margin: const EdgeInsets.only(top: 6, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -284,7 +284,7 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 4, left: seatMargin),
+          margin: const EdgeInsets.only(top: 4, left: seatMargin),
           child: Column(
             children: [
               TheaterSeat(
@@ -321,10 +321,10 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 3, left: totalseatSize),
+          margin: const EdgeInsets.only(top: 3, left: totalseatSize),
           child: Column(
             children: [
-              SizedBox(height: totalseatSize),
+              const SizedBox(height: totalseatSize),
               TheaterSeat(
                   scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
               TheaterSeat(
@@ -347,10 +347,10 @@ class TheaterSeats extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: seatMargin),
+          margin: const EdgeInsets.only(left: seatMargin),
           child: Column(
             children: [
-              SizedBox(height: totalseatSize),
+              const SizedBox(height: totalseatSize),
               TheaterSeat(
                   scaleAnimation: seatRowAnimations[1], onSelected: onSelected),
               TheaterSeat(

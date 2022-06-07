@@ -14,7 +14,7 @@ class MovieTitle extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 20, bottom: 10),
+          margin: const EdgeInsets.only(top: 20, bottom: 10),
           child: Text(
             movie.title,
             style: TextStyle(
@@ -31,8 +31,9 @@ class MovieTitle extends StatelessWidget {
           children: movie.genres
               .map(
                 (genre) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 2.5),
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
+                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
@@ -41,7 +42,7 @@ class MovieTitle extends StatelessWidget {
                   ),
                   child: Text(
                     genre,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       color: Colors.grey,
                     ),
