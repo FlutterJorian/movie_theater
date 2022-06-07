@@ -25,7 +25,7 @@ class _SelectMovieState extends State<SelectMovie>
     viewportFraction: 0.70,
   );
   double currentPage = 9999999;
-  double previousPage = 9999999;
+  int previousPage = 9999999;
 
   final ScrollController scrollController = ScrollController();
   double currentScrollOffset = 0.0;
@@ -235,62 +235,38 @@ class _SelectMovieState extends State<SelectMovie>
         body: Stack(
           children: [
             if (isPageViewEnabled) ...[
-              // AnimatedBuilder(
-              //   animation: pageController,
-              //   builder: (context, _) {
-              //     return Viewport(
-              //       axisDirection: AxisDirection.left,
-              //       slivers: [
-              //         SliverFillViewport(
-              //           delegate: SliverChildBuilderDelegate(
-              //             (context, index) {
-              //               var movieIndex = index % widget.movies.length;
-              //               return MoviePoster(
-              //                 image: widget.movies[movieIndex].image,
-              //                 isFullscreen: true,
-              //               );
-              //             },
-              //           ),
-              //         ),
-              //       ],
-              //       offset: ViewportOffset.fixed(
-              //         MediaQuery.of(context).size.width * currentPage,
-              //       ),
-              //     );
-              //   },
-              // ),
               AnimatedBuilder(
                 animation: pageController,
                 builder: (context, _) {
-                  if (currentPage.floor() == previousPage.floor() + 1 ||
-                      currentPage.floor() == previousPage.floor() - 1) {
-                    previousPage = currentPage.floor().toDouble();
+                  if (currentPage.floor() == previousPage + 1 ||
+                      currentPage.floor() == previousPage - 1) {
+                    previousPage = currentPage.floor();
                   }
                   var bgImage = widget
-                      .movies[(previousPage.round()) % widget.movies.length]
-                      .image;
+                      .movies[(previousPage) % widget.movies.length].image;
 
-                  var slidingImageIndex = previousPage.round() - 1;
+                  var slidingImageIndex = previousPage - 1;
                   if (currentPage > previousPage) {
-                    slidingImageIndex = previousPage.round() + 1;
+                    slidingImageIndex = previousPage + 1;
                   }
                   return Stack(
+                    alignment: Alignment.topLeft,
                     children: [
                       MoviePoster(
-                        image: widget
-                            .movies[slidingImageIndex % widget.movies.length]
-                            .image,
+                        image: bgImage,
                         isFullscreen: true,
                       ),
-                      Transform.translate(
-                        offset: Offset(
-                          -MediaQuery.of(context).size.width *
-                              (previousPage - currentPage),
-                          0,
-                        ),
-                        child: MoviePoster(
-                          image: bgImage,
-                          isFullscreen: true,
+                      ClipRect(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          widthFactor: (currentPage - previousPage),
+                          child: MoviePoster(
+                            image: widget
+                                .movies[
+                                    slidingImageIndex % widget.movies.length]
+                                .image,
+                            isFullscreen: true,
+                          ),
                         ),
                       ),
                     ],
